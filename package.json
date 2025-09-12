@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@clerk/clerk-expo": "^2.14.30",
-    "expo-secure-store": "^15.0.7"
-  }
-}
