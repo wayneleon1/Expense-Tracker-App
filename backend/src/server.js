@@ -14,6 +14,10 @@ const PORT = process.env.PORT || 5001;
 
 app.use("/api/transactions", transactionsRouters);
 
+app.get("/", (req, res) => {
+  res.send("Expense Tracker API is running");
+});
+
 initDB().then(() => {
   app.listen(PORT, () => {
     console.log("Server is running on:", PORT);
