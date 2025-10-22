@@ -12,7 +12,7 @@ export const useTransactions = (userId) => {
   });
   const [loading, setLoading] = useState(false);
 
-  //   it will memorize the function
+  //  it will memorize the function
   const fetchTransactions = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/${userId}`);
