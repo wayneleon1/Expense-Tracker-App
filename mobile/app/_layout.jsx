@@ -15,17 +15,22 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
+
   const [appIsReady, setAppIsReady] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useEffect(() => {
+    if (error) {
+      console.error("Font loading error:", error);
+      // Still show the app even if fonts fail
+      setAppIsReady(true);
+    }
     if (loaded) {
-      // Hide the native splash when both fonts and i18n are ready
       SplashScreen.hideAsync().catch((hideError) => {
         console.warn("Error hiding splash screen:", hideError);
       });
     }
-  }, [loaded]);
+  }, [loaded, error]);
 
   const onSplashComplete = () => {
     // Start fade-in animation for the main app
@@ -37,8 +42,16 @@ export default function RootLayout() {
     setAppIsReady(true);
   };
 
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+  if (!publishableKey) {
+    throw new Error(
+      "Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env file"
+    );
+  }
+
   return (
-    <ClerkProvider tokenCache={tokenCache}>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <SafeScreen>
         {!appIsReady ? (
           <CustomSplashScreen onFinish={onSplashComplete} />
